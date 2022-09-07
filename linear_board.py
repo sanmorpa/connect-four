@@ -20,8 +20,7 @@ class LinearBoard():
 		It puts a tile in the first available position
 		"""
 		if not self.is_full():
-			i = self._column.index(None)
-			self._column[i] = char
+			self._column[self._column.index(None)] = char
 		else:
 			print("Error, this line is full already")
 
