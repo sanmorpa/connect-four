@@ -9,6 +9,13 @@ class LinearBoard():
 	None is an empty space
 	"""
 
+	@classmethod
+	def fromList(cls, lst):
+		if len(lst) != BOARD_LENGTH:
+			raise ValueError
+		board = cls()
+		board._column = lst
+
 	def __init__(self):
 		"""
 		A list of None

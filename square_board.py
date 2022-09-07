@@ -4,6 +4,14 @@ class SquareBoard():
 	"""
 	A square board of BOARD_LENGTH X BOARD_LENGTH
 	"""
+	@classmethod
+	def fromList(cls, list_of_lists):
+		"""
+		It transform a list of lists to a LinearBoard
+		"""
+		board = cls()
+		board._board = list(map(lambda element: LinearBoard.fromList(element), list_of_lists))
+
 	def __init__(self):
 		self._board = [LinearBoard() for i in range(BOARD_LENGTH)]
 

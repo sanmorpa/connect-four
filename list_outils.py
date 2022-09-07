@@ -27,3 +27,18 @@ def find_streak(list, needle, n):
 		else: seen = 0
 		if seen == n: break
 	return seen >= n
+
+def transpose(matrix):
+	"""
+	Transposes a list of lists
+	"""
+	transposed = []
+	for i in range(len(matrix[0])):
+		transposed.append(list())
+	for n in matrix:
+		iter = 0
+		for item in n:
+			transposed[iter].append(item)
+			iter += 1
+	return transposed
+
