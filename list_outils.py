@@ -42,3 +42,33 @@ def transpose(matrix):
 			iter += 1
 	return transposed
 
+def displace(line, pos, char = None):
+	if pos == 0 or len(line) == 0:
+		return line
+	elif pos > 0:
+		filled = [char] * pos
+		displaced = filled + line
+		return displaced[:-pos]
+	else:
+		if (pos * -1) > len(line):
+			pos = (len(line) * -1)
+		displaced = line[pos * -1:]
+		displaced += [char] * (pos * -1)
+		return displaced
+
+def displace_matrix(matrix, char = None):
+	new = list()
+	for i in range(len(matrix)):
+		new.append(displace(matrix[i], i - 1, char))
+	return new
+
+def reverse_list(list):
+	if len(list) == 0:
+		return list
+	return list[::-1]
+
+def reverse_matrix(matrix):
+	new = list()
+	for item in matrix:
+		new.append(reverse_list(item))
+	return new

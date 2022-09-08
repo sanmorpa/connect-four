@@ -15,6 +15,7 @@ class LinearBoard():
 			raise ValueError
 		board = cls()
 		board._column = lst
+		return board
 
 	def __init__(self):
 		"""
@@ -35,7 +36,7 @@ class LinearBoard():
 		"""
 		It checks if a line is full
 		"""
-		return None not in self._column
+		return (None not in self._column)
 
 	def is_victory(self, char):
 		"""

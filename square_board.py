@@ -11,6 +11,7 @@ class SquareBoard():
 		"""
 		board = cls()
 		board._board = list(map(lambda element: LinearBoard.fromList(element), list_of_lists))
+		return board
 
 	def __init__(self):
 		self._board = [LinearBoard() for i in range(BOARD_LENGTH)]
@@ -20,9 +21,15 @@ class SquareBoard():
 		True if all LinearBoards are full
 		"""
 		for column in self._board:
-			if None in column:
+			if column.is_full() == False:
 				return False
 		return True
+	
+	def as_matrix(self):
+		"""
+		Returns a list of lists of the board
+		"""
+		return list(map(lambda x: x._column, self._board))
 
 	def is_victory(self, char):
 		"""
@@ -35,18 +42,31 @@ class SquareBoard():
 		True if there's a vertical victory of char
 		"""
 		for column in self._board:
-			if column.is_victory(char):
+			if column.is_victory(char) == True:
 				return True
 		return False
 	
 	def _horizontal_victory(self, char):
-		pass
+		"""
+		True if there's a horizontal victory of char
+		"""
+		transp = transpose(self.as_matrix())
+		tmp = SquareBoard.fromList(transp)
+		return tmp._vertical_victory(char)
 
 	def _rise_victory(self, char):
-		pass
+		"""
+		True if there's a rising diagonal victory of char
+		"""
+		return False
 
 	def _sink_victory(self, char):
-		pass
+		"""
+		True if there's a sinking diagonal victory of char
+		"""
+		displaced = displace_matrix(self.as_matrix())
+		tmp = SquareBoard.fromList(displaced)
+		return tmp._horizontal_victory(char)
 
 	# dunders
 	def __repr__(self):
