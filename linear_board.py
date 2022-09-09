@@ -9,19 +9,29 @@ class LinearBoard():
 	None is an empty space
 	"""
 
+	@classmethod
+	def fromList(cls, lst):
+		"""
+		Instances a LinearBoarad from a preconfigured list
+		"""
+		if len(lst) != BOARD_LENGTH:
+			raise ValueError
+		board = cls()
+		board._column = lst
+		return board
+
 	def __init__(self):
 		"""
 		A list of None
 		"""
-		self._column = [None for i in range(BOARD_LENGTH)] #_ means it's a private attribute
+		self._column = [None for i in range(BOARD_LENGTH)]
 	
 	def add(self, char):
 		"""
 		It puts a tile in the first available position
 		"""
 		if not self.is_full():
-			i = self._column.index(None)
-			self._column[i] = char
+			self._column[self._column.index(None)] = char
 		else:
 			print("Error, this line is full already")
 
@@ -29,7 +39,7 @@ class LinearBoard():
 		"""
 		It checks if a line is full
 		"""
-		return None not in self._column
+		return (None not in self._column)
 
 	def is_victory(self, char):
 		"""
