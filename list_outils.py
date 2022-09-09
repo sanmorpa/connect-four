@@ -72,8 +72,6 @@ def reverse_list(list):
 	"""
 	It returns a reversed list
 	"""
-	if len(list) == 0:
-		return list
 	return list[::-1]
 
 def reverse_matrix(matrix):
