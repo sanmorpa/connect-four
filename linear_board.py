@@ -11,6 +11,9 @@ class LinearBoard():
 
 	@classmethod
 	def fromList(cls, lst):
+		"""
+		Instances a LinearBoarad from a preconfigured list
+		"""
 		if len(lst) != BOARD_LENGTH:
 			raise ValueError
 		board = cls()
@@ -21,7 +24,7 @@ class LinearBoard():
 		"""
 		A list of None
 		"""
-		self._column = [None for i in range(BOARD_LENGTH)] #_ means it's a private attribute
+		self._column = [None for i in range(BOARD_LENGTH)]
 	
 	def add(self, char):
 		"""

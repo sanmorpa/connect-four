@@ -43,6 +43,9 @@ def transpose(matrix):
 	return transposed
 
 def displace(line, pos, char = None):
+	"""
+	Returns a displaced list o line. It moves it pos times to the right (pos > 0) or left (pos < 0) and fills the rest with char items
+	"""
 	if pos == 0 or len(line) == 0:
 		return line
 	elif pos > 0:
@@ -57,17 +60,26 @@ def displace(line, pos, char = None):
 		return displaced
 
 def displace_matrix(matrix, char = None):
+	"""
+	It returns a list of displaced lists
+	"""
 	new = list()
 	for i in range(len(matrix)):
 		new.append(displace(matrix[i], i - 1, char))
 	return new
 
 def reverse_list(list):
+	"""
+	It returns a reversed list
+	"""
 	if len(list) == 0:
 		return list
 	return list[::-1]
 
 def reverse_matrix(matrix):
+	"""
+	It returns a list of reversed lists
+	"""
 	new = list()
 	for item in matrix:
 		new.append(reverse_list(item))
