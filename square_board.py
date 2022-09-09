@@ -7,29 +7,31 @@ class SquareBoard():
 	@classmethod
 	def fromList(cls, list_of_lists):
 		"""
-		It transform a list of lists to a LinearBoard
+		It allows us to instance a SquareBoard from a pre-configured list
 		"""
+		if len(list_of_lists) != BOARD_LENGTH:
+			raise ValueError
+		for item in list_of_lists:
+			if len(item) != BOARD_LENGTH:
+				raise ValueError
 		board = cls()
-		board._board = list(map(lambda element: LinearBoard.fromList(element), list_of_lists))
+		board._board = list_of_lists
 		return board
 
 	def __init__(self):
-		self._board = [LinearBoard() for i in range(BOARD_LENGTH)]
+		"""
+		A list of None-filled lists
+		"""
+		self._board = [[None for i in range(BOARD_LENGTH)] for i in range(BOARD_LENGTH)]
 
 	def is_full(self):
 		"""
 		True if all LinearBoards are full
 		"""
 		for column in self._board:
-			if column.is_full() == False:
-				return False
-		return True
-	
-	def as_matrix(self):
-		"""
-		Returns a list of lists of the board
-		"""
-		return list(map(lambda x: x._column, self._board))
+			if None not in column:
+				return True
+		return False
 
 	def is_victory(self, char):
 		"""
@@ -42,7 +44,7 @@ class SquareBoard():
 		True if there's a vertical victory of char
 		"""
 		for column in self._board:
-			if column.is_victory(char) == True:
+			if find_streak(column, char, VICTORY_STRIKE) == True:
 				return True
 		return False
 	
@@ -50,7 +52,7 @@ class SquareBoard():
 		"""
 		True if there's a horizontal victory of char
 		"""
-		transp = transpose(self.as_matrix())
+		transp = transpose(self._board)
 		tmp = SquareBoard.fromList(transp)
 		return tmp._vertical_victory(char)
 
@@ -58,13 +60,15 @@ class SquareBoard():
 		"""
 		True if there's a rising diagonal victory of char
 		"""
-		return False
+		reversed = reverse_matrix(self._board)
+		tmp = SquareBoard.fromList(reversed)
+		return tmp._sink_victory(char)
 
 	def _sink_victory(self, char):
 		"""
 		True if there's a sinking diagonal victory of char
 		"""
-		displaced = displace_matrix(self.as_matrix())
+		displaced = displace_matrix(self._board)
 		tmp = SquareBoard.fromList(displaced)
 		return tmp._horizontal_victory(char)
 
