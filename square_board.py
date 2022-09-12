@@ -75,3 +75,6 @@ class SquareBoard():
 	# dunders
 	def __repr__(self):
 		return f"{self.__class__}:{self._board}"
+	
+	def __len__(self):
+		return len(self._board)
