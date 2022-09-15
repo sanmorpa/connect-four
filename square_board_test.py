@@ -10,6 +10,18 @@ def test_empty_board():
 	assert board.is_victory('o') == False
 	assert board.is_victory('x') == False
 
+def test_play():
+	before = SquareBoard.fromList([[None, None, None, None],
+								['x', 'o', 'x', 'o'],
+								['x', 'o', 'x', 'o'],
+								['x', None, None, None]])
+	after = before = SquareBoard.fromList([['x', None, None, None],
+								['x', 'o', 'x', 'o'],
+								['x', 'o', 'x', 'o'],
+								['x', None, None, None]])
+	before.play('x', 0)
+	before.play('o', 1)
+	assert before == after
 
 def test_vertical_victory():
 	vertical = SquareBoard.fromList([['o', 'x', 'x', 'x'],

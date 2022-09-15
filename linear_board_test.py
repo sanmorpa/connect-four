@@ -37,6 +37,6 @@ def test_add_to_full():
 	full = LinearBoard()
 	for i in range(BOARD_LENGTH):
 		full.add('x')
-	
+
 	full.add('x')
 	assert full.is_full()

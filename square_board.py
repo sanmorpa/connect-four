@@ -1,3 +1,4 @@
+from settings import *
 from linear_board import *
 
 class SquareBoard():
@@ -33,12 +34,21 @@ class SquareBoard():
 				return True
 		return False
 
+	def play(self, char, col):
+		if None in self._board[col]:
+			self._board[col][self._board[col].index(None)] = char
+		else:
+			print("Error, that column is full")
+
+	def is_tie(self, char1, char2):
+		return None not in self._column and not self.is_victory(char1) and not self.is_victory(char2)
+
 	def is_victory(self, char):
 		"""
 		True if there is any victory either vertical, horizontal or diagonal
 		"""
 		return self._vertical_victory(char) or self._horizontal_victory(char) or self._rise_victory(char) or self._sink_victory(char)
-	
+
 	def _vertical_victory(self, char):
 		"""
 		True if there's a vertical victory of char
@@ -47,7 +57,7 @@ class SquareBoard():
 			if find_streak(column, char, VICTORY_STRIKE) == True:
 				return True
 		return False
-	
+
 	def _horizontal_victory(self, char):
 		"""
 		True if there's a horizontal victory of char
@@ -75,6 +85,12 @@ class SquareBoard():
 	# dunders
 	def __repr__(self):
 		return f"{self.__class__}:{self._board}"
-	
+
 	def __len__(self):
 		return len(self._board)
+
+	def __eq__(self, other):
+		return isinstance(other, self.__class__) and self._board == other._board
+
+	def __hash__(self) -> int:
+		return hash((self._board))
