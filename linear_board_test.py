@@ -1,4 +1,3 @@
-import pytest
 from linear_board import *
 from settings import BOARD_LENGTH, VICTORY_STRIKE
 
