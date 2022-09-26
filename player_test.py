@@ -1,6 +1,6 @@
-from square_board import SquareBoard
-from oracle import BaseOracle
-from player import Player #, _is_int, _is_non_full_column, _is_within_column_range
+from square_board import *
+from oracle import *
+from player import Player, HumanPlayer, _is_int, _is_non_full_column, _is_within_column_range
 
 def test_play():
 	before = SquareBoard.fromList([[None, None, None, None],
@@ -52,3 +52,4 @@ def test_is_int():
 	assert _is_int('hola') == False
 	assert _is_int('') == False
 	assert _is_int('3.14') == False
+

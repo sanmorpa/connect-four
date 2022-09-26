@@ -1,4 +1,3 @@
-import pytest
 from list_outils import *
 
 def test_find_one():
