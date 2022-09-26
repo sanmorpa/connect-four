@@ -2,10 +2,21 @@ from settings import *
 from oracle import *
 
 class Player():
-	def __init__(self, name, char, oracle = BaseOracle()):
+	def __init__(self, name, char = None, opponent = None, oracle = BaseOracle()):
 		self.name = name
 		self.char = char
 		self.oracle = oracle
+		self.opponent = opponent
+
+	@property
+	def opponent(self):
+		return self._opponent
+
+	@opponent.setter
+	def opponent(self, newValue):
+		if newValue != None:
+			self._opponent = newValue
+			newValue._opponent = self
 
 	def play(self, board):
 		'''
@@ -38,7 +49,7 @@ class Player():
 		return (recommendations, best)
 
 class HumanPlayer(Player):
-	def __init__(self, name, char):
+	def __init__(self, name, char = None):
 		super().__init__(name, char)
 
 	def _ask_oracle(self, board):

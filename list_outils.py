@@ -25,7 +25,7 @@ def find_streak(list, needle, n):
 	for i in list:
 		if i == needle: seen += 1
 		else: seen = 0
-		if seen == n: break
+		if seen == n: return True
 	return seen >= n
 
 def transpose(matrix):

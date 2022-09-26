@@ -41,7 +41,7 @@ class SquareBoard():
 			print("Error, that column is full")
 
 	def is_tie(self, char1, char2):
-		return None not in self._column and not self.is_victory(char1) and not self.is_victory(char2)
+		return self.is_full() and not self.is_victory(char1) and not self.is_victory(char2)
 
 	def is_victory(self, char):
 		"""

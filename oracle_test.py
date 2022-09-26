@@ -1,6 +1,6 @@
 from oracle import *
 from square_board import SquareBoard
-# from player import Player
+from player import Player
 from settings import BOARD_LENGTH
 
 
