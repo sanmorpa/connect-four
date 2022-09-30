@@ -82,3 +82,11 @@ def reverse_matrix(matrix):
 	for item in matrix:
 		new.append(reverse_list(item))
 	return new
+
+def all_same(lst):
+	if (len(lst) > 0):
+		for i in lst:
+			if i != lst[0]:
+				return False
+		return True
+	return True

@@ -1,5 +1,6 @@
 from settings import *
 from oracle import *
+from random import *
 
 class Player():
 	def __init__(self, name, char = None, opponent = None, oracle = BaseOracle()):
@@ -7,6 +8,7 @@ class Player():
 		self.char = char
 		self.oracle = oracle
 		self.opponent = opponent
+		self.last_move = None
 
 	@property
 	def opponent(self):
@@ -23,7 +25,6 @@ class Player():
 		The player plays in a position recommended by the oracle
 		'''
 		(recommendation, best) = self._ask_oracle(board)
-
 		self._play_on(board, best)
 
 	def _play_on(self, board, best):
@@ -31,14 +32,17 @@ class Player():
 		It allows the player to play on the best column
 		'''
 		board.play(self.char, best)
+		self.last_move = best
 
 	def _choose(self, recommendations):
 		'''
-		Gives the best position to play according to what the oracle recommended
+		Gives the best position to play according to what the oracle recommends
 		'''
-		for i in range(len(recommendations)):
-			if recommendations[i].classification.value == 0:
-				return i
+		valid = [i for i in recommendations if i.classification.value != -1]
+		valid = sorted(valid, key=lambda x: x.classification.value, reverse = True)
+		if  all_same(valid):
+			return (valid[0].index)
+		return (choice(valid).index)
 
 	def _ask_oracle(self, board):
 		'''
@@ -50,6 +54,8 @@ class Player():
 
 	def __repr__(self):
 		return f"Class Player({self.name}, {self.char}, {self.oracle})"
+	def __str__(self) -> str:
+		return f"Robot player '{self.name}' with icon '{self.char}'"
 
 class HumanPlayer(Player):
 	def __init__(self, name, char = None):
@@ -59,20 +65,22 @@ class HumanPlayer(Player):
 		'''
 		Operator Overloading of _ask_oracle to change the oracle to the human's input
 		'''
-		user_input = input(f"Where do you want to play {self.name}? ")
+		user_input = input(f"Where do you want to play {self.name}? (to ask the oracle type 'h' or 'help')\n>> ")
 		while 1:
 			if _is_int(user_input) and _is_within_column_range(board, int(user_input)) and _is_non_full_column(board, int(user_input)):
 				return (self.oracle.get_recommendation(board), int(user_input))
 			elif user_input == 'h' or user_input == 'help':
 				rec = self.oracle.get_recommendation(board, self.name)
 				for i in rec:
-					print(f"For column with index {i.index} the oracle says: {i.classification}")
+					print(f"For column with index {i.index} the oracle says: {i.classification.name}")
 			else:
 				print("Error, invalid input. Please enter the index of the column in digits. if you want a recommendation, insert 'h' or 'help")
-			user_input = input(f"Where do you want to play {self.name}? ")
+			user_input = input(f"Where do you want to play {self.name}? (to ask the oracle type 'h' or 'help')\n>> ")
 
 	def __repr__(self):
 		return f"Class HumanPlayer({self.name}, {self.char}, {self.opponent} , {self.oracle})"
+	def __str__(self) -> str:
+		return f"Player '{self.name}' with icon '{self.char}'"
 
 def	_is_non_full_column(board, num):
 	'''

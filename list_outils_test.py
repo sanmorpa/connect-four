@@ -1,4 +1,5 @@
 from list_outils import *
+from oracle import *
 
 def test_find_one():
 	needle = 1
