@@ -1,10 +1,13 @@
 from enum import Enum
+from syslog import LOG_USER
 from square_board import *
 from copy import deepcopy
+from settings import BOARD_LENGTH
 
 class ColumnClassification(Enum):
 	FULL	= -1
-	MAYBE	= 0
+	LOSE	= 99
+	MAYBE	= 10
 	WIN		= 100
 
 class ColumnRecommendation():
@@ -31,7 +34,7 @@ class BaseOracle():
 		recommendations = list()
 		for line in range(len(board)):
 			if None in board._board[line]:
-				recommendations.append(ColumnRecommendation(line, 0))
+				recommendations.append(ColumnRecommendation(line, 10))
 			else:
 				recommendations.append(ColumnRecommendation(line, -1))
 		return recommendations
@@ -46,13 +49,34 @@ class SmartOracle(BaseOracle):
 		"""
 		recommendation = super().get_recommendation(board, player)
 		for i in range (len(recommendation)):
-			if recommendation[i].classification.value == 0:
+			if recommendation[i].classification == ColumnClassification.MAYBE:
 				if self._is_winning_move(board, i, player):
-					recommendation[i] = ColumnRecommendation(i, 100)
-		print(recommendation)
+					recommendation[i].classification = ColumnClassification.WIN
+				elif self._is_losing_move(board, i, player):
+					recommendation[i].classification = ColumnClassification.LOSE
+#			print(recommendation[i])
 		return recommendation
 
 	def _is_winning_move(self, board, index, player):
+		"""
+		it checks if playing in the column would make the player win
+		"""
+		c_board = deepcopy(board)
+		c_board.play(player.char, index)
+		return c_board.is_victory(player.char)
+
+	def _is_losing_move(self, board, index, player):
+		"""
+		it checks if playing in the column would make the opponent win the next round
+		"""
+		c_board = deepcopy(board)
+		c_board.play(player.char, index)
+		for i in range(0, BOARD_LENGTH):
+			if self._is_winning_move(c_board, i, player.opponent):
+				return True
+		return False
+
+	def _is_losing_move(self, board, index, player):
 		"""
 		it checks if playing in the column would make the player win
 		"""

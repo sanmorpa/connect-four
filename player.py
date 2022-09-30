@@ -3,7 +3,7 @@ from oracle import *
 from random import *
 
 class Player():
-	def __init__(self, name, char = None, opponent = None, oracle = BaseOracle()):
+	def __init__(self, name, char = None, opponent = None, oracle = SmartOracle()):
 		self.name = name
 		self.char = char
 		self.oracle = oracle
@@ -40,15 +40,15 @@ class Player():
 		'''
 		valid = [i for i in recommendations if i.classification.value != -1]
 		valid = sorted(valid, key=lambda x: x.classification.value, reverse = True)
-		if  all_same(valid):
-			return (valid[0].index)
-		return (choice(valid).index)
+		if all_same(valid):
+			return (choice(valid).index)
+		return (valid[0].index)
 
 	def _ask_oracle(self, board):
 		'''
 		It asks the oracle for all predictions and the best one
 		'''
-		recommendations = self.oracle.get_recommendation(board)
+		recommendations = self.oracle.get_recommendation(board, self)
 		best = self._choose(recommendations)
 		return (recommendations, best)
 
@@ -68,9 +68,9 @@ class HumanPlayer(Player):
 		user_input = input(f"Where do you want to play {self.name}? (to ask the oracle type 'h' or 'help')\n>> ")
 		while 1:
 			if _is_int(user_input) and _is_within_column_range(board, int(user_input)) and _is_non_full_column(board, int(user_input)):
-				return (self.oracle.get_recommendation(board), int(user_input))
+				return (self.oracle.get_recommendation(board, self), int(user_input))
 			elif user_input == 'h' or user_input == 'help':
-				rec = self.oracle.get_recommendation(board, self.name)
+				rec = self.oracle.get_recommendation(board, self)
 				for i in rec:
 					print(f"For column with index {i.index} the oracle says: {i.classification.name}")
 			else:
