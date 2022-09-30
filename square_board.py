@@ -30,9 +30,9 @@ class SquareBoard():
 		True if all LinearBoards are full
 		"""
 		for column in self._board:
-			if None not in column:
-				return True
-		return False
+			if None in column:
+				return False
+		return True
 
 	def play(self, char, col):
 		if None in self._board[col]:

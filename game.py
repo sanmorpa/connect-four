@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from pyfiglet import *
+# from pyfiglet import *
 from match import Match
 from player import Player, HumanPlayer
 from square_board import SquareBoard
@@ -25,8 +25,9 @@ class Game():
 		self._start_game()
 
 	def print_logo(self):
-		logo = Figlet(font='rounded')
-		print(logo.renderText("Connect four"))
+		# logo = Figlet(font='rounded')
+		# print(logo.renderText("Connect four"))
+		print("Connect-four")
 
 	def _user_configuration(self):
 		"""
@@ -35,8 +36,15 @@ class Game():
 		self.round_type = self._get_round_type()
 		self.match = self._make_match()
 
-	def _start_game():
-		pass
+	def _start_game_loop(self):
+		while self._game_over == False:
+			current_player = self.match.next_player()
+			current_player.play(self.board)
+			self.display_move(current_player)
+			self.display_board()
+		self.display_result()
+
+
 
 	def _get_round_type(self):
 		type = input("""Select a type of round:\n1) Computer vs Computer\n2)Computer vs Human\n>> """)
@@ -58,5 +66,14 @@ class Game():
 			player2 = Player("Big Robot")
 		return Match(player1, player2)
 
-	def _has_winner_or_tie(self):
-		return self.match.get_winner(self.board)
+	def _game_over(self):
+		return self.match.get_winner(self.board) != None or self.board.is_full()
+
+	def display_move(self):
+		pass
+
+	def display_board(self):
+		pass
+
+	def display_result(self):
+		pass

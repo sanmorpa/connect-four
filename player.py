@@ -48,6 +48,9 @@ class Player():
 		best = self._choose(recommendations)
 		return (recommendations, best)
 
+	def __repr__(self):
+		return f"Class Player({self.name}, {self.char}, {self.oracle})"
+
 class HumanPlayer(Player):
 	def __init__(self, name, char = None):
 		super().__init__(name, char)
@@ -67,6 +70,9 @@ class HumanPlayer(Player):
 			else:
 				print("Error, invalid input. Please enter the index of the column in digits. if you want a recommendation, insert 'h' or 'help")
 			user_input = input(f"Where do you want to play {self.name}? ")
+
+	def __repr__(self):
+		return f"Class HumanPlayer({self.name}, {self.char}, {self.opponent} , {self.oracle})"
 
 def	_is_non_full_column(board, num):
 	'''

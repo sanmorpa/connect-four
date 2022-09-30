@@ -18,9 +18,9 @@ class Match():
 
 	def get_winner(self, board):
 		if board.is_victory('x'):
-			return self._players['x']
+			return self.get_player('x')
 		elif board.is_victory('o'):
-			return self._players['o']
+			return self.get_player('o')
 		else:
 			return None
 
