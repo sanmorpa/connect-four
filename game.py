@@ -17,9 +17,10 @@ class DifficultyLevel(Enum):
 	HIGH = auto()
 
 class Game():
-	def __init__(self, round_type = RoundType.NPC_VS_NPC, match = Match(Player("Patrisio"), Player("Pinwinasio"))):
-		self.round_type = round_type
-		self.match = match
+	def __init__(self):
+		self.round_type = RoundType.NPC_VS_NPC
+		self.match = Match(Player("Little Robot"), Player("Huge Robot"))
+		self.difficulty = DifficultyLevel.MEDIUM
 		self.board = SquareBoard()
 
 	def start(self):
@@ -36,6 +37,7 @@ class Game():
 		Asks user for type of match and difficulty level
 		"""
 		self.round_type = self._get_round_type()
+		self.difficulty = self._get_difficulty()
 		self.match = self._make_match()
 
 	def _start_game():
@@ -49,24 +51,35 @@ class Game():
 			self.display_board()
 		self.display_result()
 
+	def _get_difficulty(self):
+		type = input("Select a difficulty:\n1) LOW\n2) MEDIUM\n3) HIGH\n>> ")
+		while (type != "1" and type != "2" and type != "3"):
+			type = input("Error. It can only be 1, 2 or 3.\n\nSelect a difficulty:\n1) LOW\n2) MEDIUM\n3) HIGH\n>> ")
+		if type == "1":
+			return DifficultyLevel.LOW
+		elif type == "2":
+			return DifficultyLevel.MEDIUM
+		else:
+			return DifficultyLevel.HIGH
+
 	def _get_round_type(self):
-		type = input("""Select a type of round:\n1) Computer vs Computer\n2) Computer vs Human\n>> """)
+		type = input("Select a type of round:\n1) Computer vs Computer\n2) Computer vs Human\n>> ")
 		while (type != "1" and type != "2"):
-			type = input("""Error. It can only be 1 or 2.\n\nSelect a type of round:\n1) Computer vs Computer\n2) Computer vs Human\n>> """)
+			type = input("Error. It can only be 1 or 2.\n\nSelect a type of round:\n1) Computer vs Computer\n2) Computer vs Human\n>> ")
 		if type == "1":
 			return RoundType.NPC_VS_NPC
 		else:
 			return RoundType.NPC_VS_PC
 
 	def _make_match(self):
-		player1 = Player("Little Robot")
+		player1 = self.match._players['x']
 		if self.round_type == RoundType.NPC_VS_PC:
 			name = input("What's your name?\n>> ")
 			while len(name) == 0:
 				name = input("Error, enter a name.\nWhat's your name?\n>> ")
 			player2 = HumanPlayer(name)
 		else:
-			player2 = Player("Big Robot")
+			player2  = self.match._players['o']
 		return Match(player1, player2)
 
 	def _game_over(self):

@@ -6,7 +6,7 @@ from settings import BOARD_LENGTH
 
 class ColumnClassification(Enum):
 	FULL	= -1
-	LOSE	= 99
+	LOSE	= 5
 	MAYBE	= 10
 	WIN		= 100
 
@@ -45,16 +45,16 @@ class BaseOracle():
 class SmartOracle(BaseOracle):
 	def get_recommendation(self, board, player = None):
 		"""
-		It refines super's calssification and tries to find Win columns
+		It refines super's calssification and tries to find Win or lose columns
 		"""
 		recommendation = super().get_recommendation(board, player)
 		for i in range (len(recommendation)):
 			if recommendation[i].classification == ColumnClassification.MAYBE:
-				if self._is_winning_move(board, i, player):
+				if self._is_winning_move(board, i, player) == True:
 					recommendation[i].classification = ColumnClassification.WIN
-				elif self._is_losing_move(board, i, player):
+				elif self._is_losing_move(board, i, player) == True:
 					recommendation[i].classification = ColumnClassification.LOSE
-#			print(recommendation[i])
+			print(recommendation[i])
 		return recommendation
 
 	def _is_winning_move(self, board, index, player):
@@ -72,17 +72,9 @@ class SmartOracle(BaseOracle):
 		c_board = deepcopy(board)
 		c_board.play(player.char, index)
 		for i in range(0, BOARD_LENGTH):
-			if self._is_winning_move(c_board, i, player.opponent):
-				return True
-		return False
-
-	def _is_losing_move(self, board, index, player):
-		"""
-		it checks if playing in the column would make the player win
-		"""
-		c_board = deepcopy(board)
-		player._play_on(c_board, index)
-		if c_board.is_victory(player.char):
-			return True
+			cc_board = c_board
+			if None in board._board[index]:
+				if self._is_winning_move(cc_board, i, player.opponent):
+					return True
 		return False
 
