@@ -41,15 +41,15 @@ class BaseOracle():
 		return recommendations
 
 	def print_recommendation(self, board, player = None):
-		recommendation = self.get_recommendation(board, player)
-		rec = [list(i.classification.name) for i in recommendation]
+		"""
+		It print's the oracle's recommendations for each column
+		"""
+		rec = [[i.classification.name] for i in self.get_recommendation(board, player)]
 		matrix = reverse_matrix(rec)
-		print(matrix)
 		bt = BeautifulTable()
 		for col in matrix:
 			bt.columns.append(col)
-		print(bt)
-		bt.columns.header = [str(i) for i in range(BOARD_LENGTH)]
+		bt.columns.header = [str(i) for i in range(1, BOARD_LENGTH + 1)]
 		print(bt)
 
 	def __repr__(self) -> str:

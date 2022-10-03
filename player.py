@@ -67,13 +67,10 @@ class HumanPlayer(Player):
 		'''
 		user_input = input(f"Where do you want to play {self.name}? (to ask the oracle type 'h' or 'help')\n>> ")
 		while 1:
-			if _is_int(user_input) and _is_within_column_range(board, int(user_input)) and _is_non_full_column(board, int(user_input)):
-				return (self.oracle.get_recommendation(board, self), int(user_input))
+			if _is_int(user_input) and _is_within_column_range(board, int(user_input) - 1) and _is_non_full_column(board, int(user_input) - 1):
+				return (self.oracle.get_recommendation(board, self), int(user_input) - 1)
 			elif user_input == 'h' or user_input == 'help':
 				self.oracle.print_recommendation(board, self)
-				rec = self.oracle.get_recommendation(board, self)
-				for i in rec:
-					print(f"For column with index {i.index} the oracle says: {i.classification.name}")
 			else:
 				print("Error, invalid input. Please enter the index of the column in digits. if you want a recommendation, insert 'h' or 'help")
 			user_input = input(f"Where do you want to play {self.name}? (to ask the oracle type 'h' or 'help')\n>> ")
