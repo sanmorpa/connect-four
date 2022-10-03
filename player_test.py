@@ -1,27 +1,14 @@
-from square_board import *
-from oracle import *
-from player import Player, HumanPlayer, _is_int, _is_non_full_column, _is_within_column_range
-
-def test_play():
-	before = SquareBoard.fromList([[None, None, None, None],
-								['x', 'o', 'x', 'o'],
-								['x', 'o', 'x', 'o'],
-								['x', None, None, None]])
-	after = SquareBoard.fromList([['x', None, None, None],
-								['x', 'o', 'x', 'o'],
-								['x', 'o', 'x', 'o'],
-								['x', None, None, None]])
-	player = Player('Patrisio', 'x', oracle = BaseOracle())
-
-	player.play(before)
-	assert before == after
+from square_board import SquareBoard
+from oracle import BaseOracle
+from player import Player, _is_int, _is_non_full_column, _is_within_column_range
 
 
 def test_valid_column():
-	board = SquareBoard.fromList([['x', None, None, None, ],
-								['x', 'o', 'x', 'o', ],
-								['o', 'o', 'x', 'x', ],
-								['o', None, None, None, ]])
+	board = SquareBoard.fromList([['x', None, None, None, None],
+								['x', 'o', 'x', 'o', None],
+								['o', 'o', 'x', 'x', None],
+								['o', None, None, None, None],
+								['o', None, None, None, None]])
 
 	assert _is_within_column_range(board, 0)
 	assert _is_within_column_range(board, 1)
@@ -33,10 +20,11 @@ def test_valid_column():
 
 def test_is_non_full_column():
 
-	board = SquareBoard.fromList([['x', None, None, None, ],
-								['x', 'o', 'x', 'o', ],
-								['o', 'o', 'x', 'x', ],
-								['o', None, None, None, ]])
+	board = SquareBoard.fromList([['x', None, None, None, None],
+								['x', 'o', 'x', 'o', 'o'],
+								['o', 'o', 'x', 'x', 'o'],
+								['o', None, None, None, None],
+								['o', None, None, None, None]])
 
 	assert _is_non_full_column(board,0)
 	assert _is_non_full_column(board, 1) == False
@@ -52,4 +40,3 @@ def test_is_int():
 	assert _is_int('hola') == False
 	assert _is_int('') == False
 	assert _is_int('3.14') == False
-

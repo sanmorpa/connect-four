@@ -28,6 +28,7 @@ def test_tie():
 	b.add('o')
 	b.add('x')
 	b.add('o')
+	b.add('o')
 
 	assert b.is_tie('x', 'o')
 

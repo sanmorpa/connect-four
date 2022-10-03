@@ -1,4 +1,3 @@
-import pytest
 from player import Player
 from match import Match
 from square_board import SquareBoard
@@ -38,10 +37,10 @@ def test_next_player_is_round_robbin():
 
 def test_get_winner():
 	t = Match(xavier, otto)
-	win_x = SquareBoard.fromList([['x', 'o', None, None, ],
-								  ['o', 'x', None, None, ],
-								  ['x', 'o', 'x', 'o', ],
-								  ['x', 'o', None, None, ],
-								  ])
+	win_x = SquareBoard.fromList([['x', 'o', None, None,  None],
+								['o', 'x', None, None,  None],
+								['x', 'o', 'x', 'o',  None],
+								['x', 'o', 'o', 'x',  None],
+								['x', 'o', None, None,  None]])
 	assert t.get_winner(win_x) != None
 	assert t.get_winner(win_x) == xavier

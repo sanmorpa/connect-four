@@ -12,26 +12,29 @@ def test_created_with_defaults():
 
 def test_is_game_over():
 	game = Game()
-	win_x = SquareBoard.fromList([['x', 'o', None, None, ],
-								  ['o', 'x', None, None, ],
-								  ['x', 'o', 'x', 'o', ],
-								  ['x', 'o', None, None, ],
-								  ])
+	win_x = SquareBoard.fromList([['x', 'o', None, None, None],
+								['x', 'x', None, None, None],
+								['x', 'o', 'x', 'o', None],
+								['x', 'o', None, None, None],
+								['x', 'o', None, None, None]])
 
-	win_o = SquareBoard.fromList([['x', 'o', 'x', 'o', ],
-								  ['x', 'x', 'o', None, ],
-								  ['o', 'o', None, None, ],
-								  ['o', 'x', None, None, ]])
+	win_o = SquareBoard.fromList([['x', 'o', 'x', 'o', None],
+								['o', 'x', 'o', None, None],
+								['o', 'o', None, None, None],
+								['o', 'x', None, None, None],
+								['o', 'x', None, None, None]])
 
-	tie = SquareBoard.fromList([['o', 'x', 'x', 'o', ],
-								['x', 'o', 'o', 'x', ],
-								['o', 'x', 'x', 'o', ],
-								['x', 'o', 'o', 'x', ]])
+	tie = SquareBoard.fromList([['o', 'x', 'x', 'o', 'o'],
+								['x', 'o', 'o', 'x', 'o'],
+								['o', 'x', 'x', 'o', 'o'],
+								['x', 'o', 'o', 'x', 'x'],
+								['x', 'x', 'o', 'x', 'x']])
 
-	unfinished = SquareBoard.fromList([['o', 'x', 'x', 'o'],
-									   [None, None, None, None],
-									   [None, None, None, None],
-									   [None, None, None, None]])
+	unfinished = SquareBoard.fromList([['o', 'x', 'x', 'o', None],
+									[None, None, None, None, None],
+									[None, None, None, None, None],
+									[None, None, None, None, None],
+									[None, None, None, None, None]])
 
 	game.board = win_x
 	assert game._game_over() == True
