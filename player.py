@@ -70,6 +70,7 @@ class HumanPlayer(Player):
 			if _is_int(user_input) and _is_within_column_range(board, int(user_input)) and _is_non_full_column(board, int(user_input)):
 				return (self.oracle.get_recommendation(board, self), int(user_input))
 			elif user_input == 'h' or user_input == 'help':
+				self.oracle.print_recommendation(board, self)
 				rec = self.oracle.get_recommendation(board, self)
 				for i in rec:
 					print(f"For column with index {i.index} the oracle says: {i.classification.name}")

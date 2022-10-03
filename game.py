@@ -1,5 +1,6 @@
 from enum import Enum, auto
 from list_outils import reverse_matrix
+from oracle import BaseOracle, SmartOracle
 from pyfiglet import *
 from match import Match
 from player import Player, HumanPlayer
@@ -37,7 +38,8 @@ class Game():
 		Asks user for type of match and difficulty level
 		"""
 		self.round_type = self._get_round_type()
-		self.difficulty = self._get_difficulty()
+		if self.round_type == RoundType.NPC_VS_PC:
+			self.difficulty = self._get_difficulty()
 		self.match = self._make_match()
 
 	def _start_game():
@@ -72,7 +74,12 @@ class Game():
 			return RoundType.NPC_VS_PC
 
 	def _make_match(self):
+		_levels = {DifficultyLevel.LOW: BaseOracle(),
+		DifficultyLevel.MEDIUM: SmartOracle(),
+		DifficultyLevel.HIGH: SmartOracle()
+		}
 		player1 = self.match._players['x']
+		player1.oracle = _levels[self.difficulty]
 		if self.round_type == RoundType.NPC_VS_PC:
 			name = input("What's your name?\n>> ")
 			while len(name) == 0:

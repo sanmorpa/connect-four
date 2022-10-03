@@ -2,6 +2,7 @@ from enum import Enum
 from syslog import LOG_USER
 from square_board import *
 from copy import deepcopy
+from beautifultable import BeautifulTable
 from settings import BOARD_LENGTH
 
 class ColumnClassification(Enum):
@@ -39,8 +40,20 @@ class BaseOracle():
 				recommendations.append(ColumnRecommendation(line, -1))
 		return recommendations
 
+	def print_recommendation(self, board, player = None):
+		recommendation = self.get_recommendation(board, player)
+		rec = [list(i.classification.name) for i in recommendation]
+		matrix = reverse_matrix(rec)
+		print(matrix)
+		bt = BeautifulTable()
+		for col in matrix:
+			bt.columns.append(col)
+		print(bt)
+		bt.columns.header = [str(i) for i in range(BOARD_LENGTH)]
+		print(bt)
+
 	def __repr__(self) -> str:
-		return f"Class Oracle()"
+		return f"Class BaseOracle()"
 
 class SmartOracle(BaseOracle):
 	def get_recommendation(self, board, player = None):
@@ -54,13 +67,14 @@ class SmartOracle(BaseOracle):
 					recommendation[i].classification = ColumnClassification.WIN
 				elif self._is_losing_move(board, i, player) == True:
 					recommendation[i].classification = ColumnClassification.LOSE
-			print(recommendation[i])
 		return recommendation
 
 	def _is_winning_move(self, board, index, player):
 		"""
 		it checks if playing in the column would make the player win
 		"""
+		if None not in board._board[index]:
+			return False
 		c_board = deepcopy(board)
 		c_board.play(player.char, index)
 		return c_board.is_victory(player.char)
@@ -69,12 +83,15 @@ class SmartOracle(BaseOracle):
 		"""
 		it checks if playing in the column would make the opponent win the next round
 		"""
+		if None not in board._board[index]:
+			return False
 		c_board = deepcopy(board)
 		c_board.play(player.char, index)
 		for i in range(0, BOARD_LENGTH):
-			cc_board = c_board
-			if None in board._board[index]:
-				if self._is_winning_move(cc_board, i, player.opponent):
-					return True
+			if self._is_winning_move(c_board, i, player.opponent):
+				return True
 		return False
+
+	def __repr__(self) -> str:
+		return f"Class SmartOracle()"
 

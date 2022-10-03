@@ -38,7 +38,7 @@ class SquareBoard():
 		if None in self._board[col]:
 			self._board[col][self._board[col].index(None)] = char
 		else:
-			print("Error, that column is full")
+			print(f"Error, column {col} is full")
 
 	def is_tie(self, char1, char2):
 		return self.is_full() and not self.is_victory(char1) and not self.is_victory(char2)
