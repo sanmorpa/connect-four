@@ -90,3 +90,54 @@ def all_same(lst):
 				return False
 		return True
 	return True
+
+def collapse_list(lst):
+	"""
+	Transforms a list into a string
+	"""
+	ret = ""
+	for item in lst:
+		if item == None:
+			ret += "."
+		else:
+			ret += item
+	return ret
+
+def collapse_matrix(matrix):
+	"""
+	transforms a matrix into a string
+	"""
+	ret = ""
+	for item in range(len(matrix)):
+		ret += collapse_list(matrix[item])
+		if item  != len(matrix) - 1:
+			ret += "|"
+	return ret
+
+def replace_all_in_list(lst, src, dest):
+	"""
+	Replaces all src elements of a list to dest
+	"""
+	if len(lst) == 0:
+		return lst
+	for item in range(len(lst)):
+		if lst[item] == src:
+			lst[item] = dest
+	return lst
+
+def replace_all_in_matrix(lst, src, dest):
+	"""
+	Replaces all src elements of a matrix to dest
+	"""
+	for item in range(len(lst)):
+		lst[item] = replace_all_in_list(lst[item], src, dest)
+	return lst
+
+def explode_string(src):
+	return list(src)
+
+def explode_list_of_strings(src):
+	ret = []
+	for item in src:
+		ret.append(explode_string(item))
+	return ret

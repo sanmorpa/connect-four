@@ -1,7 +1,4 @@
-import pytest
-
 from square_board import *
-
 
 def test_empty_board():
 

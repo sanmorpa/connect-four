@@ -19,6 +19,33 @@ class SquareBoard():
 		board._board = list_of_lists
 		return board
 
+	@classmethod
+	def fromBoardCode(cls, board_code):
+		"""
+		It allows us to instance a SquareBoard from a BoardCode class
+		"""
+		return cls.fromBoardRawCode(board_code._raw_code)
+
+	@classmethod
+	def fromBoardRawCode(cls, raw_code):
+		"""
+		Creates a instance of SquareBoard from the raw string of the BoardCode class
+		"""
+		lst = []
+		i = 0
+		while i < len(raw_code):
+			aux_lst = []
+			while i < len(raw_code) and raw_code[i] != "|":
+				if raw_code[i] == ".":
+					aux_lst.append(None)
+				else:
+					aux_lst.append(raw_code[i])
+				i += 1
+			lst.append(aux_lst)
+			if i < len(raw_code):
+				i += 1
+		return cls.fromList(lst)
+
 	def __init__(self):
 		"""
 		A list of None-filled lists
@@ -39,6 +66,9 @@ class SquareBoard():
 			self._board[col][self._board[col].index(None)] = char
 		else:
 			print(f"Error, column {col} is full")
+
+	def as_code(self):
+		return BoardCode(self)
 
 	def is_tie(self, char1, char2):
 		return self.is_full() and not self.is_victory(char1) and not self.is_victory(char2)
@@ -82,7 +112,6 @@ class SquareBoard():
 		tmp = SquareBoard.fromList(displaced)
 		return tmp._horizontal_victory(char)
 
-	# dunders
 	def __repr__(self):
 		return f"{self.__class__}:{self._board}"
 
@@ -94,3 +123,22 @@ class SquareBoard():
 
 	def __hash__(self) -> int:
 		return hash((self._board))
+
+class BoardCode:
+	def __init__(self, board):
+		self._raw_code = collapse_matrix(board._board)
+
+	@property
+	def raw_code(self):
+		return self._raw_code
+
+	def __eq__(self, other):
+		if not isinstance(other, self.__class__):
+			return False
+		return self._raw_code == other._raw_code
+
+	def __hash__(self) -> int:
+		return hash((self._raw_code))
+
+	def __repr__(self):
+		return f"BoardCode({self._raw_code})"

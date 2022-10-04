@@ -1,5 +1,5 @@
 from settings import BOARD_LENGTH, VICTORY_STRIKE
-from list_outils import *
+from outils import *
 
 class LinearBoard():
 	"""
@@ -25,7 +25,7 @@ class LinearBoard():
 		A list of None
 		"""
 		self._column = [None for i in range(BOARD_LENGTH)]
-	
+
 	def add(self, char):
 		"""
 		It puts a tile in the first available position
@@ -49,6 +49,6 @@ class LinearBoard():
 
 	def is_tie(self, char1, char2):
 		"""
-		It checks if there is a tie between players: No victory of player1 nor player2 
+		It checks if there is a tie between players: No victory of player1 nor player2
 		"""
 		return (self.is_full() == True and self.is_victory(char1) == False and self.is_victory(char2) == False)

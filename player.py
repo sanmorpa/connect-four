@@ -3,7 +3,7 @@ from oracle import *
 from random import *
 
 class Player():
-	def __init__(self, name, char = None, opponent = None, oracle = SmartOracle()):
+	def __init__(self, name, char = None, opponent = None, oracle = MemoizingOracle()):
 		self.name = name
 		self.char = char
 		self.oracle = oracle

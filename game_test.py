@@ -1,4 +1,3 @@
-import pytest
 from game import Game
 from square_board import SquareBoard
 

@@ -4,6 +4,7 @@ from square_board import *
 from copy import deepcopy
 from beautifultable import BeautifulTable
 from settings import BOARD_LENGTH
+from outils import *
 
 class ColumnClassification(Enum):
 	FULL	= -1
@@ -95,3 +96,18 @@ class SmartOracle(BaseOracle):
 	def __repr__(self) -> str:
 		return f"Class SmartOracle()"
 
+class MemoizingOracle(SmartOracle):
+
+	def __init__(self):
+		self._past_recommendations = {}
+
+	def get_recommendation(self, board, player = None):
+		"""
+		Overloads method get_recommendation so it's memoized
+		"""
+		collapsed = collapse_matrix(board._board)
+		if collapsed in self._past_recommendations:
+			return self._past_recommendations[collapsed]
+		recommendation = super().get_recommendation(board, player)
+		self._past_recommendations[collapsed] = recommendation
+		return recommendation

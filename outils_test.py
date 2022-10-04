@@ -1,4 +1,4 @@
-from list_outils import *
+from outils import *
 from oracle import *
 
 def test_find_one():
@@ -132,3 +132,13 @@ def test_replace_all_in_matrix():
 		None, None, 2, True], [4, 5, '#']]
 	assert replace_all_in_matrix([], None, 7) == []
 	assert replace_all_in_matrix([[], []], None, 7) == [[], []]
+
+def test_explode_string():
+	assert explode_string('Han') == ['H', 'a', 'n']
+	assert explode_string('') == []
+
+
+def test_explode_list_of_strings():
+	assert explode_list_of_strings(['Han', 'Solo']) == [['H', 'a', 'n'], ['S', 'o', 'l', 'o']]
+	assert explode_list_of_strings(['', '', '']) == [[],[],[]]
+	assert explode_list_of_strings([]) == []

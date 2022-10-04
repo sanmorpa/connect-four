@@ -1,6 +1,6 @@
 from enum import Enum, auto
-from list_outils import reverse_matrix
-from oracle import BaseOracle, SmartOracle
+from outils import reverse_matrix
+from oracle import BaseOracle, MemoizingOracle, SmartOracle
 from pyfiglet import *
 from match import Match
 from player import Player, HumanPlayer
@@ -85,8 +85,8 @@ class Game():
 
 	def _make_match(self):
 		_levels = {DifficultyLevel.LOW: BaseOracle(),
-		DifficultyLevel.MEDIUM: SmartOracle(),
-		DifficultyLevel.HIGH: SmartOracle()
+		DifficultyLevel.MEDIUM: MemoizingOracle(),
+		DifficultyLevel.HIGH: MemoizingOracle()
 		}
 		player1 = self.match._players['x']
 		player1.oracle = _levels[self.difficulty]
