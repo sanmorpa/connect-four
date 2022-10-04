@@ -8,7 +8,7 @@ from outils import *
 
 class ColumnClassification(Enum):
 	FULL	= -1
-	LOSE	= 5
+	BAD		= 1
 	MAYBE	= 10
 	WIN		= 100
 
@@ -67,7 +67,7 @@ class SmartOracle(BaseOracle):
 				if self._is_winning_move(board, i, player) == True:
 					recommendation[i].classification = ColumnClassification.WIN
 				elif self._is_losing_move(board, i, player) == True:
-					recommendation[i].classification = ColumnClassification.LOSE
+					recommendation[i].classification = ColumnClassification.BAD
 		return recommendation
 
 	def _is_winning_move(self, board, index, player):
