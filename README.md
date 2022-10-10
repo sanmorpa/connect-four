@@ -17,7 +17,7 @@ DIFFICULTY OPTIONS:
 This is my solution to the guided proyect presented by Keepcoding®'s course "Curso Resolución de Problemas con OOP y TDD - Introducción IA y Machine Learning".
 
 ## Requirements
-* Python 3.9
+* Python 3.9 or +
 * Packages:
   * Pytest
   * BeautifulTable
