@@ -5,7 +5,7 @@ A connect-four game with a simple AI. It has been developped in python and has t
 Right now I'm working on making the last part of the game: a simple AI for the bots and the player's oracle.
 
 RIVAL OPTIONS:
-1. Bot vs Bot. Two "highly intelligent" bots will play against each other... Who will win? Little Robor or Huge Robot?
+1. Bot vs Bot. Two "highly intelligent" bots will play against each other... Who will win? Little Robot or Huge Robot?
 2. Bot vs Player. Play against Little Robot, the best conenct-four player on the galaxy!
 3. Player vs Player. Play against a friend!
 
