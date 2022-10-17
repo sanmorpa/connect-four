@@ -1,9 +1,11 @@
 from settings import *
 from oracle import *
 from random import *
+from square_board import *
+from move import Move
 
 class Player():
-	def __init__(self, name, char = None, opponent = None, oracle = MemoizingOracle()):
+	def __init__(self, name, char = None, opponent = None, oracle = LearningOracle()):
 		self.name = name
 		self.char = char
 		self.oracle = oracle
@@ -24,15 +26,15 @@ class Player():
 		'''
 		The player plays in a position recommended by the oracle
 		'''
-		(recommendation, best) = self._ask_oracle(board)
-		self._play_on(board, best)
+		(recommendations, best) = self._ask_oracle(board)
+		self._play_on(board, best, recommendations)
 
-	def _play_on(self, board, best):
+	def _play_on(self, board, position, recommendations):
 		'''
 		It allows the player to play on the best column
 		'''
-		board.play(self.char, best)
-		self.last_move = best
+		board.play(self.char, position)
+		self.last_move = Move(position, board.as_code(), recommendations, self)
 
 	def _choose(self, recommendations):
 		'''
@@ -44,11 +46,17 @@ class Player():
 			return (choice(valid).index)
 		return (valid[0].index)
 
+	def on_win(self):
+		pass
+
+	def on_lose(self):
+		pass
+
 	def _ask_oracle(self, board):
 		'''
 		It asks the oracle for all predictions and the best one
 		'''
-		recommendations = self.oracle.get_recommendation(board, self)
+		recommendations = self.oracle.get_recommendations(board, self)
 		best = self._choose(recommendations)
 		return (recommendations, best)
 
@@ -68,7 +76,7 @@ class HumanPlayer(Player):
 		user_input = input(f"Where do you want to play {self.name}? (to ask the oracle type 'h' or 'help')\n>> ")
 		while 1:
 			if _is_int(user_input) and _is_within_column_range(board, int(user_input) - 1) and _is_non_full_column(board, int(user_input) - 1):
-				return (self.oracle.get_recommendation(board, self), int(user_input) - 1)
+				return (self.oracle.get_recommendations(board, self), int(user_input) - 1)
 			elif user_input == 'h' or user_input == 'help':
 				self.oracle.print_recommendation(board, self)
 			else:
@@ -79,6 +87,12 @@ class HumanPlayer(Player):
 		return f"Class HumanPlayer({self.name}, {self.char}, {self.opponent} , {self.oracle})"
 	def __str__(self) -> str:
 		return f"Player '{self.name}' with icon '{self.char}'"
+
+class ReportingPlayer(Player):
+	def on_lose(self):
+		board_code = self.last_move.board_code
+		position = self.last_move.position
+		self.oracle.update_to_bad(board_code, self, position)
 
 def	_is_non_full_column(board, num):
 	'''

@@ -18,8 +18,8 @@ def test_base_oracle():
 
 	rappel = BaseOracle()
 
-	assert len(rappel.get_recommendation(board, None)) == len(expected)
-	assert rappel.get_recommendation(board, None) == expected
+	assert len(rappel.get_recommendations(board, None)) == len(expected)
+	assert rappel.get_recommendations(board, None) == expected
 
 
 def test_equality():
@@ -80,5 +80,5 @@ def test_classification():
 		ColumnRecommendation(2, ColumnClassification.MAYBE),
 		ColumnRecommendation(3, ColumnClassification.LOSE)]
 
-	assert oracle1.get_recommendation(board1, x) == expected
-	assert oracle2.get_recommendation(board1, x) == expected
+	assert oracle1.get_recommendations(board1, x) == expected
+	assert oracle2.get_recommendations(board1, x) == expected

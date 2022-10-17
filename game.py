@@ -1,9 +1,10 @@
 from enum import Enum, auto
 from outils import reverse_matrix
-from oracle import BaseOracle, MemoizingOracle, SmartOracle
+from oracle import BaseOracle, LearningOracle, MemoizingOracle, SmartOracle
+from move import Move
 from pyfiglet import *
 from match import Match
-from player import Player, HumanPlayer
+from player import Player, HumanPlayer, ReportingPlayer
 from settings import BOARD_LENGTH
 from square_board import SquareBoard
 from beautifultable import BeautifulTable
@@ -21,7 +22,7 @@ class DifficultyLevel(Enum):
 class Game():
 	def __init__(self):
 		self.round_type = RoundType.NPC_VS_NPC
-		self.match = Match(Player("Little Robot"), Player("Huge Robot"))
+		self.match = Match(ReportingPlayer("Little Robot"), ReportingPlayer("Huge Robot"))
 		self.difficulty = DifficultyLevel.MEDIUM
 		self.board = SquareBoard()
 
@@ -30,8 +31,12 @@ class Game():
 		Starts the game
 		"""
 		self.print_logo()
-		self._user_configuration()
-		self._game_loop()
+		while 1:
+			self._user_configuration()
+			self._game_loop()
+			if self._break_loop() == True:
+				break
+		print("Bye-bye! Thanks for playing!")
 
 	def print_logo(self):
 		"""
@@ -61,6 +66,14 @@ class Game():
 			self.display_board()
 		self.display_result()
 
+	def _break_loop(self):
+		cont = input("\nAnother round?\n>> ")
+		while cont != "yes" and cont != "y"  and cont != "no" and cont != "n":
+			cont = input("\nError. please type yes/y or no/n.\nAnother round?\n >> ")
+		if cont == "yes" or cont == "y":
+			return False
+		return True
+
 	def _get_difficulty(self):
 		type = input("Select a difficulty:\n1) LOW\n2) MEDIUM\n3) HIGH\n>> ")
 		while (type != "1" and type != "2" and type != "3"):
@@ -86,7 +99,7 @@ class Game():
 	def _make_match(self):
 		_levels = {DifficultyLevel.LOW: BaseOracle(),
 		DifficultyLevel.MEDIUM: MemoizingOracle(),
-		DifficultyLevel.HIGH: MemoizingOracle()
+		DifficultyLevel.HIGH: LearningOracle()
 		}
 		player1 = self.match._players['x']
 		player1.oracle = _levels[self.difficulty]
@@ -112,7 +125,7 @@ class Game():
 		return self.match.get_winner(self.board) != None or self.board.is_full()
 
 	def display_move(self, player):
-		print(f"\nPlayer {player.name} ({player.char}) has played on column {player.last_move}")
+		print(f"\nPlayer {player.name} ({player.char}) has played on column {player.last_move.position + 1}")
 
 	def display_board(self):
 		matrix = reverse_matrix(self.board._board)

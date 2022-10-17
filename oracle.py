@@ -1,4 +1,5 @@
 from enum import Enum
+from inspect import CO_ASYNC_GENERATOR
 from syslog import LOG_USER
 from square_board import *
 from copy import deepcopy
@@ -29,7 +30,7 @@ class ColumnRecommendation():
 		return f"ColumnRecomendation({self.index}, {self.classification})"
 
 class BaseOracle():
-	def get_recommendation(self, board, player = None):
+	def get_recommendations(self, board, player = None):
 		"""
 		Returns a list of ColumnRecommendations
 		"""
@@ -45,7 +46,7 @@ class BaseOracle():
 		"""
 		It print's the oracle's recommendations for each column
 		"""
-		rec = [[i.classification.name] for i in self.get_recommendation(board, player)]
+		rec = [[i.classification.name] for i in self.get_recommendations(board, player)]
 		matrix = reverse_matrix(rec)
 		bt = BeautifulTable()
 		for col in matrix:
@@ -57,11 +58,11 @@ class BaseOracle():
 		return f"Class BaseOracle()"
 
 class SmartOracle(BaseOracle):
-	def get_recommendation(self, board, player = None):
+	def get_recommendations(self, board, player = None):
 		"""
 		It refines super's calssification and tries to find Win or lose columns
 		"""
-		recommendation = super().get_recommendation(board, player)
+		recommendation = super().get_recommendations(board, player)
 		for i in range (len(recommendation)):
 			if recommendation[i].classification == ColumnClassification.MAYBE:
 				if self._is_winning_move(board, i, player) == True:
@@ -101,13 +102,25 @@ class MemoizingOracle(SmartOracle):
 	def __init__(self):
 		self._past_recommendations = {}
 
-	def get_recommendation(self, board, player = None):
+	def get_recommendations(self, board, player = None):
 		"""
-		Overloads method get_recommendation so it's memoized
+		Overloads method get_recommendations so it's memoized
 		"""
 		collapsed = collapse_matrix(board._board)
 		if collapsed in self._past_recommendations:
 			return self._past_recommendations[collapsed]
-		recommendation = super().get_recommendation(board, player)
+		recommendation = super().get_recommendations(board, player)
 		self._past_recommendations[collapsed] = recommendation
 		return recommendation
+
+class LearningOracle(MemoizingOracle):
+	def update_to_bad(self, board_code, player, position):
+		"""
+		It updates a recommendation to bad if it made the player loose last time
+		"""
+		board = SquareBoard.fromBoardCode(board_code)
+		key = collapse_matrix(board)
+		recommendation = self.get_recommendations(board, player)
+		recommendation[position] = ColumnRecommendation(position, ColumnClassification.BAD)
+		self._past_recommendations[key] = recommendation
+
